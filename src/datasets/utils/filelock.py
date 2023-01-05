@@ -404,7 +404,7 @@ class UnixFileLock(BaseFileLock):
         fd = os.open(self._lock_file, open_mode)
 
         try:
-            fcntl.flock(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            fcntl.lockf(fd, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError:
             os.close(fd)
         else:
@@ -418,7 +418,7 @@ class UnixFileLock(BaseFileLock):
         #   https://stackoverflow.com/questions/17708885/flock-removing-locked-file-without-race-condition
         fd = self._lock_file_fd
         self._lock_file_fd = None
-        fcntl.flock(fd, fcntl.LOCK_UN)
+        fcntl.lockf(fd, fcntl.LOCK_UN)
         os.close(fd)
         return None
 
